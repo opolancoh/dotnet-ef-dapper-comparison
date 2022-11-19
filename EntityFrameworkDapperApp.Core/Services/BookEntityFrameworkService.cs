@@ -4,11 +4,11 @@ using EntityFrameworkDapperApp.Core.Entities.DTOs;
 
 namespace EntityFrameworkDapperApp.Core.Services;
 
-public sealed class BookService : IBookService
+public sealed class BookEntityFrameworkService : IBookEntityFrameworkService
 {
-    private readonly IBookRepository _repository;
+    private readonly IBookEntityFrameworkRepository _repository;
 
-    public BookService(IBookRepository repository)
+    public BookEntityFrameworkService(IBookEntityFrameworkRepository repository)
     {
         _repository = repository;
     }

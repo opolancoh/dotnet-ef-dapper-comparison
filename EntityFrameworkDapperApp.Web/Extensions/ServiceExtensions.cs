@@ -2,19 +2,43 @@ using Microsoft.EntityFrameworkCore;
 using EntityFrameworkDapperApp.Core.Contracts.Repositories;
 using EntityFrameworkDapperApp.Core.Contracts.Services;
 using EntityFrameworkDapperApp.Core.Services;
+using EntityFrameworkDapperApp.Repository.Dapper;
 using EntityFrameworkDapperApp.Repository.EntityFramework;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace EntityFrameworkDapperApp.Web.Extensions;
 
 public static class ServiceExtensions
 {
+    public static void ConfigureApiVersioning(this IServiceCollection services)
+    {
+        services.AddApiVersioning(options =>
+        {
+            options.DefaultApiVersion = new ApiVersion(1, 0);
+            options.AssumeDefaultVersionWhenUnspecified = true;
+            options.ReportApiVersions = true;
+            options.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
+                new HeaderApiVersionReader("x-api-version"),
+                new MediaTypeApiVersionReader("x-api-version"));
+        });
+    }
+    
     public static void ConfigurePersistenceServices(this IServiceCollection services)
     {
-        services.AddScoped<IBookRepository, BookRepository>();
-        services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IBookEntityFrameworkRepository, BookEntityFrameworkRepository>();
+        services.AddScoped<IBookDapperRepository, BookDapperRepository>();
+
+        services.AddScoped<IBookEntityFrameworkService, BookEntityFrameworkService>();
+        services.AddScoped<IBookDapperService, BookDapperService>();
     }
 
-    public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration) =>
-        services.AddDbContext<EntityFrameworkDbContext>(opts =>
-            opts.UseNpgsql(configuration.GetConnectionString("DbConnection")));
+    public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
+    {
+        var dbConnection = configuration.GetConnectionString("DbConnection");
+
+        services.AddDbContext<EntityFrameworkDbContext>(opts => opts.UseNpgsql(dbConnection));
+
+        services.AddSingleton(x => new DapperDbContext(dbConnection));
+    }
 }

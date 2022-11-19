@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkDapperApp.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkDapperApp.Repository.EntityFramework", "EntityFrameworkDapperApp.Repository.EntityFramework\EntityFrameworkDapperApp.Repository.EntityFramework.csproj", "{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkDapperApp.Repository.Dapper", "EntityFrameworkDapperApp.Repository.Dapper\EntityFrameworkDapperApp.Repository.Dapper.csproj", "{6AD71476-2B5F-4C02-98E9-A49B4279C028}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AD71476-2B5F-4C02-98E9-A49B4279C028}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AD71476-2B5F-4C02-98E9-A49B4279C028}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AD71476-2B5F-4C02-98E9-A49B4279C028}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AD71476-2B5F-4C02-98E9-A49B4279C028}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

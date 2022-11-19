@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkDapperApp.Repository.EntityFramework;
 
-public class BookRepository : IBookRepository
+public class BookEntityFrameworkRepository : IBookEntityFrameworkRepository
 {
     private readonly DbSet<Book> _entityItems;
 
-    public BookRepository(EntityFrameworkDbContext context)
+    public BookEntityFrameworkRepository(EntityFrameworkDbContext context)
     {
         _entityItems = context.Books;
     }

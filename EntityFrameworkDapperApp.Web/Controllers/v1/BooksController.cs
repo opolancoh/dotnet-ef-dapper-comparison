@@ -2,15 +2,17 @@ using EntityFrameworkDapperApp.Core.Contracts.Services;
 using EntityFrameworkDapperApp.Core.Entities.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EntityFrameworkDapperApp.Web.Controllers;
+namespace EntityFrameworkDapperApp.Web.Controllers.v1;
 
+[ApiVersion("1.0")]
 [Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 public class BooksController : ControllerBase
 {
-    private readonly IBookService _service;
+    private readonly IBookEntityFrameworkService _service;
 
-    public BooksController(IBookService service)
+    public BooksController(IBookEntityFrameworkService service)
     {
         _service = service;
     }
