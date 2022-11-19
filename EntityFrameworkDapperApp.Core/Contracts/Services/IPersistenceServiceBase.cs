@@ -1,4 +1,4 @@
-namespace EntityFrameworkDapperApp.Core.Contracts.Repositories;
+namespace EntityFrameworkDapperApp.Core.Contracts.Services;
 
 public interface IPersistenceServiceBase<TModel, TCreate, TUpdate>
 {

@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkDapperApp.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkDapperApp.Core", "EntityFrameworkDapperApp.Core\EntityFrameworkDapperApp.Core.csproj", "{661E865F-6818-4EDF-B3E6-3E5167122F15}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityFrameworkDapperApp.Repository.EntityFramework", "EntityFrameworkDapperApp.Repository.EntityFramework\EntityFrameworkDapperApp.Repository.EntityFramework.csproj", "{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{661E865F-6818-4EDF-B3E6-3E5167122F15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{661E865F-6818-4EDF-B3E6-3E5167122F15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{661E865F-6818-4EDF-B3E6-3E5167122F15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABC645CB-09F5-4489-B4FE-62FEADAB0A82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

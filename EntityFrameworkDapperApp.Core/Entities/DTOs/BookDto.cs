@@ -6,5 +6,5 @@ public record BookDto
     public string Title { get; init; }
     public DateTime PublishedOn { get; init; }
     
-    public ICollection<ListDto> Reviews { get; init; } = new List<ListDto>();
+    public IEnumerable<ReviewBaseDto> Reviews { get; init; } = new List<ReviewBaseDto>();
 };
