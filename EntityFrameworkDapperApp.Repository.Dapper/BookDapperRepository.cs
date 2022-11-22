@@ -1,7 +1,9 @@
+using System.Data;
 using Dapper;
 using EntityFrameworkDapperApp.Core.Contracts.Repositories;
 using EntityFrameworkDapperApp.Core.Entities;
 using EntityFrameworkDapperApp.Core.Entities.DTOs;
+using EntityFrameworkDapperApp.Core.Exceptions;
 using EntityFrameworkDapperApp.Repository.Dapper.Schemas;
 
 namespace EntityFrameworkDapperApp.Repository.Dapper;
@@ -20,50 +22,33 @@ public class BookDapperRepository : IBookDapperRepository
         return await FetchData();
     }
 
-/*
     public async Task<BookDto?> GetById(Guid id)
     {
-        var result = await GetItemData(id);
+        var result = await FetchData(id);
 
         return result.SingleOrDefault();
     }
 
-    public async Task<Guid> Create(BookForCreatingDto item)
+    public async Task Create(Book item)
     {
-        var newItem = new Book()
-        {
-            Id = Guid.NewGuid(),
-            Title = item.Title!,
-            PublishedOn = item.PublishedOn!.Value
-        };
-
         const string query =
             $@"INSERT INTO ""{BookSchema.Table}"" (""{BookSchema.Columns.Id}"", ""{BookSchema.Columns.Title}"", ""{BookSchema.Columns.PublishedOn}"") " +
             $@"VALUES (@{BookSchema.Columns.Id}, @{BookSchema.Columns.Title}, @{BookSchema.Columns.PublishedOn})";
 
         var parameters = new DynamicParameters();
-        parameters.Add(BookSchema.Columns.Id, newItem.Id, DbType.Guid);
-        parameters.Add(BookSchema.Columns.Title, newItem.Title, DbType.String);
-        parameters.Add(BookSchema.Columns.PublishedOn, newItem.PublishedOn, DbType.DateTime);
+        parameters.Add(BookSchema.Columns.Id, item.Id, DbType.Guid);
+        parameters.Add(BookSchema.Columns.Title, item.Title, DbType.String);
+        parameters.Add(BookSchema.Columns.PublishedOn, item.PublishedOn, DbType.DateTime);
 
         using var connection = _context.CreateConnection();
         var result = await connection.ExecuteAsync(query, parameters);
 
         if (result == 0)
             throw new Exception("The resource was not modified.");
-
-        return newItem.Id;
     }
 
-    public async Task Update(BookForUpdatingDto item)
+    public async Task Update(Book item)
     {
-        var itemToUpdate = new Book()
-        {
-            Id = item.Id!.Value,
-            Title = item.Title!,
-            PublishedOn = item.PublishedOn!.Value.ToUniversalTime()
-        };
-
         const string query =
             $@"UPDATE ""{BookSchema.Table}"" SET " +
             $@"""{BookSchema.Columns.Title}"" = @{BookSchema.Columns.Title}, " +
@@ -71,18 +56,18 @@ public class BookDapperRepository : IBookDapperRepository
             $@"WHERE ""{BookSchema.Columns.Id}"" = @{BookSchema.Columns.Id}";
 
         var parameters = new DynamicParameters();
-        parameters.Add(BookSchema.Columns.Id, itemToUpdate.Id, DbType.Guid);
-        parameters.Add(BookSchema.Columns.Title, itemToUpdate.Title, DbType.String);
-        parameters.Add(BookSchema.Columns.PublishedOn, itemToUpdate.PublishedOn, DbType.DateTime);
+        parameters.Add(BookSchema.Columns.Id, item.Id, DbType.Guid);
+        parameters.Add(BookSchema.Columns.Title, item.Title, DbType.String);
+        parameters.Add(BookSchema.Columns.PublishedOn, item.PublishedOn, DbType.DateTime);
 
         using var connection = _context.CreateConnection();
         var result = await connection.ExecuteAsync(query, parameters);
 
         if (result == 0)
         {
-            var itemExists = await ItemExists(itemToUpdate.Id, connection);
+            var itemExists = await ItemExists(item.Id, connection);
             if (!itemExists)
-                throw new EntityNotFoundException(itemToUpdate.Id);
+                throw new EntityNotFoundException(item.Id);
             else
                 throw new Exception("The resource was not modified.");
         }
@@ -109,12 +94,18 @@ public class BookDapperRepository : IBookDapperRepository
         }
     }
 
+    public async Task<bool> ItemExists(Guid id)
+    {
+        using var connection = _context.CreateConnection();
+        return await ItemExists(id, connection);
+    }
+
     private async Task<bool> ItemExists(Guid id, IDbConnection connection)
     {
-        return await connection.ExecuteScalarAsync<bool>(
-            $@"SELECT COUNT(1) FROM ""{BookSchema.Table}"" WHERE ""{BookSchema.Columns.Id}"" = '{id}'");
+        var sql = $@"SELECT COUNT(1) FROM ""{BookSchema.Table}"" WHERE ""{BookSchema.Columns.Id}"" = '{id}'";
+        return await connection.ExecuteScalarAsync<bool>(sql);
     }
-*/
+
     private async Task<IEnumerable<BookDto>> FetchData(Guid? itemId = null)
     {
         const string baseQuery =
@@ -134,12 +125,13 @@ public class BookDapperRepository : IBookDapperRepository
             itemId == null ? baseQuery : $@"{baseQuery} WHERE b.""{BookSchema.Columns.Id}"" = '{itemId.Value}'",
             (book, review) =>
             {
-                // Check if the item was already added
+                // Check if the item was already added just to append a comment
                 if (result.TryGetValue(book.Id, out var existingItem))
                 {
                     existingItem.Reviews.Append(new ReviewBaseDto
                         { Id = review.Id, Comment = review.Comment, Rating = review.Rating });
                 }
+                // Create a new Book item and add it to the dictionary
                 else
                 {
                     var newItem = new BookDto { Id = book.Id, Title = book.Title, PublishedOn = book.PublishedOn };

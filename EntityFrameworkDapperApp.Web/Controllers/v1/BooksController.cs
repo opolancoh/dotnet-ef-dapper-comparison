@@ -1,13 +1,14 @@
 using EntityFrameworkDapperApp.Core.Contracts.Services;
 using EntityFrameworkDapperApp.Core.Entities.DTOs;
+using EntityFrameworkDapperApp.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EntityFrameworkDapperApp.Web.Controllers.v1;
 
+[ApiController]
 [ApiVersion("1.0")]
 [Route("api/[controller]")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[ApiController]
 public class BooksController : ControllerBase
 {
     private readonly IBookEntityFrameworkService _service;
@@ -22,11 +23,11 @@ public class BooksController : ControllerBase
     {
         return await _service.GetAll();
     }
-/*
+
     [HttpGet("{id}")]
-    public async Task<ActionResult<BookDetailDto>> GetById(Guid id)
+    public async Task<ActionResult<BookDto>> GetById(Guid id)
     {
-        var item = await _service.BookService.GetById(id);
+        var item = await _service.GetById(id);
 
         if (item == null)
         {
@@ -35,21 +36,21 @@ public class BooksController : ControllerBase
 
         return item;
     }
-    
-    [HttpPost]
-    public async Task<ActionResult<BookAddUpdateOutputDto>> Add(BookAddUpdateInputDto item)
-    {
-        var newItem = await _service.BookService.Add(item);
 
-        return CreatedAtAction(nameof(GetById), new {id = newItem.Id}, newItem);
+    [HttpPost]
+    public async Task<IActionResult> Create(BookForCreatingDto item)
+    {
+        var newItemId = await _service.Create(item);
+
+        return CreatedAtAction(nameof(GetById), new { id = newItemId }, new { });
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, BookAddUpdateInputDto item)
+    public async Task<IActionResult> Update(Guid id, BookForUpdatingDto item)
     {
         try
         {
-            await _service.BookService.Update(id, item);
+            await _service.Update(id, item);
         }
         catch (EntityNotFoundException)
         {
@@ -64,7 +65,7 @@ public class BooksController : ControllerBase
     {
         try
         {
-            await _service.BookService.Remove(id);
+            await _service.Remove(id);
         }
         catch (EntityNotFoundException)
         {
@@ -73,5 +74,4 @@ public class BooksController : ControllerBase
 
         return NoContent();
     }
-    */
 }

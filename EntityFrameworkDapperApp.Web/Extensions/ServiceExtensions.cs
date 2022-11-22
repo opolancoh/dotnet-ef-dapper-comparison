@@ -18,12 +18,10 @@ public static class ServiceExtensions
             options.DefaultApiVersion = new ApiVersion(1, 0);
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.ReportApiVersions = true;
-            options.ApiVersionReader = ApiVersionReader.Combine(new UrlSegmentApiVersionReader(),
-                new HeaderApiVersionReader("x-api-version"),
-                new MediaTypeApiVersionReader("x-api-version"));
+            options.ApiVersionReader = new UrlSegmentApiVersionReader();
         });
     }
-    
+
     public static void ConfigurePersistenceServices(this IServiceCollection services)
     {
         services.AddScoped<IBookEntityFrameworkRepository, BookEntityFrameworkRepository>();

@@ -20,6 +20,8 @@ if (app.Environment.IsDevelopment())
     // app.UseSwaggerUI();
 }
 
+app.UseApiVersioning();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -27,3 +29,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// For testing purposes
+public partial class Program {}

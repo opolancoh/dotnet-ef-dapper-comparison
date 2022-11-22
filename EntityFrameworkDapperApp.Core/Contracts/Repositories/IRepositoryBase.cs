@@ -1,11 +1,11 @@
 namespace EntityFrameworkDapperApp.Core.Contracts.Repositories;
 
-public interface IRepositoryBase<TModel, TCreate, TUpdate>
+public interface IRepositoryBase<TDto, in TEntity>
 {
-    Task<IEnumerable<TModel>> GetAll();
-    /* Task<TModel?> GetById(Guid id);
-    Task<Guid> Create(TCreate item);
-    Task Update(TUpdate item);
+    Task<IEnumerable<TDto>> GetAll();
+    Task<TDto?> GetById(Guid id);
+    Task Create(TEntity item);
+    Task Update(TEntity item);
     Task Remove(Guid id);
-    Task<bool> ItemExists(Guid id); */
+    Task<bool> ItemExists(Guid id);
 }

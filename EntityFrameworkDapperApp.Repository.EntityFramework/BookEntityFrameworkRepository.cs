@@ -1,17 +1,20 @@
 using EntityFrameworkDapperApp.Core.Contracts.Repositories;
 using EntityFrameworkDapperApp.Core.Entities;
 using EntityFrameworkDapperApp.Core.Entities.DTOs;
+using EntityFrameworkDapperApp.Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityFrameworkDapperApp.Repository.EntityFramework;
 
 public class BookEntityFrameworkRepository : IBookEntityFrameworkRepository
 {
-    private readonly DbSet<Book> _entityItems;
+    private readonly EntityFrameworkDbContext _context;
+    private readonly DbSet<Book> _entitySet;
 
     public BookEntityFrameworkRepository(EntityFrameworkDbContext context)
     {
-        _entityItems = context.Books;
+        _context = context;
+        _entitySet = context.Books;
     }
 
     public async Task<IEnumerable<BookDto>> GetAll()
@@ -21,78 +24,71 @@ public class BookEntityFrameworkRepository : IBookEntityFrameworkRepository
         return await query.ToListAsync();
     }
 
-/*
-    public async Task<BookDetailDto?> GetById(Guid id)
+    public async Task<BookDto?> GetById(Guid id)
     {
-        var query = GetBookDetailDtoQuery();
+        var query = GetBookDtoQuery();
 
         return await query.SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public void Add(Book item)
+    public async Task Create(Book item)
     {
-        AddOne(item);
+        _entitySet.Add(item);
+        await _context.SaveChangesAsync();
     }
 
-    public void Update(Guid id, BookAddUpdateInputDto item)
+    public async Task Update(Book item)
     {
-        var currentItem = _entityItems
-            .Include(x => x.Image)
-            .Include(x => x.AuthorsLink)
-            .FirstOrDefault(x => x.Id == id);
+        _context.Entry(item).State = EntityState.Modified;
 
-        if (currentItem == null)
+        try
         {
-            throw new EntityNotFoundException(id);
+            await _context.SaveChangesAsync();
         }
-
-        // Main update
-        currentItem.Title = item.Title;
-        currentItem.PublishedOn = item.PublishedOn;
-
-        // Image update
-        currentItem.Image.Url = item.Image.Url;
-        currentItem.Image.Alt = item.Image.Alt;
-
-        // Authors update
-        var authorsToAdd = item.Authors
-            .Where(x => currentItem.AuthorsLink.All(y => y.AuthorId != x))
-            .Select(x => new BookAuthor {BookId = id, AuthorId = x});
-        foreach (var authorToAdd in authorsToAdd)
+        catch (DbUpdateConcurrencyException)
         {
-            currentItem.AuthorsLink.Add(authorToAdd);
+            if (!await ItemExists(item.Id))
+            {
+                throw new EntityNotFoundException(item.Id);
+            }
+            else
+            {
+                throw;
+            }
         }
-
-        var authorsToRemove = currentItem.AuthorsLink
-            .Where(x => item.Authors.All(y => y != x.AuthorId))
-            .ToList();
-        foreach (var authorToRemove in authorsToRemove)
-        {
-            currentItem.AuthorsLink.Remove(authorToRemove);
-        }
-
-        UpdateOne(currentItem);
     }
 
-    public void Remove(Guid id)
+    public async Task Remove(Guid id)
     {
-        var currentItem = _entityItems
-            .Include(x => x.Image)
-            .Include(x => x.AuthorsLink)
-            .AsNoTracking()
-            .FirstOrDefault(x => x.Id == id);
+        var item = new Book { Id = id };
 
-        if (currentItem == null)
+        _entitySet.Remove(item);
+
+        try
         {
-            throw new EntityNotFoundException(id);
+            await _context.SaveChangesAsync();
         }
-
-        RemoveOne(currentItem);
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!await ItemExists(id))
+            {
+                throw new EntityNotFoundException(id);
+            }
+            else
+            {
+                throw;
+            }
+        }
     }
-*/
+
+    public async Task<bool> ItemExists(Guid id)
+    {
+        return await _entitySet.AnyAsync(e => e.Id == id);
+    }
+
     private IQueryable<BookDto> GetBookDtoQuery()
     {
-        return _entityItems
+        return _entitySet
             .AsNoTracking()
             .Select(x => new BookDto
             {
