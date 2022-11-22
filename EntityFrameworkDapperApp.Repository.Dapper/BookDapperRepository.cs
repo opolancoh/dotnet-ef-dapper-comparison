@@ -31,7 +31,7 @@ public class BookDapperRepository : IBookDapperRepository
 
     public async Task Create(Book item)
     {
-        const string query =
+        const string sql =
             $@"INSERT INTO ""{BookSchema.Table}"" (""{BookSchema.Columns.Id}"", ""{BookSchema.Columns.Title}"", ""{BookSchema.Columns.PublishedOn}"") " +
             $@"VALUES (@{BookSchema.Columns.Id}, @{BookSchema.Columns.Title}, @{BookSchema.Columns.PublishedOn})";
 
@@ -41,15 +41,15 @@ public class BookDapperRepository : IBookDapperRepository
         parameters.Add(BookSchema.Columns.PublishedOn, item.PublishedOn, DbType.DateTime);
 
         using var connection = _context.CreateConnection();
-        var result = await connection.ExecuteAsync(query, parameters);
+        var result = await connection.ExecuteAsync(sql, parameters);
 
         if (result == 0)
-            throw new Exception("The resource was not modified.");
+            throw new Exception("The resource was not created.");
     }
 
     public async Task Update(Book item)
     {
-        const string query =
+        const string sql =
             $@"UPDATE ""{BookSchema.Table}"" SET " +
             $@"""{BookSchema.Columns.Title}"" = @{BookSchema.Columns.Title}, " +
             $@"""{BookSchema.Columns.PublishedOn}"" = @{BookSchema.Columns.PublishedOn} " +
@@ -61,7 +61,7 @@ public class BookDapperRepository : IBookDapperRepository
         parameters.Add(BookSchema.Columns.PublishedOn, item.PublishedOn, DbType.DateTime);
 
         using var connection = _context.CreateConnection();
-        var result = await connection.ExecuteAsync(query, parameters);
+        var result = await connection.ExecuteAsync(sql, parameters);
 
         if (result == 0)
         {
@@ -69,20 +69,20 @@ public class BookDapperRepository : IBookDapperRepository
             if (!itemExists)
                 throw new EntityNotFoundException(item.Id);
             else
-                throw new Exception("The resource was not modified.");
+                throw new Exception("The resource was not updated.");
         }
     }
 
     public async Task Remove(Guid id)
     {
-        const string query =
+        const string sql =
             $@"DELETE FROM ""{BookSchema.Table}"" WHERE ""{BookSchema.Columns.Id}"" = @{BookSchema.Columns.Id}";
 
         var parameters = new DynamicParameters();
         parameters.Add(BookSchema.Columns.Id, id, DbType.Guid);
 
         using var connection = _context.CreateConnection();
-        var result = await connection.ExecuteAsync(query, parameters);
+        var result = await connection.ExecuteAsync(sql, parameters);
 
         if (result == 0)
         {
@@ -90,7 +90,7 @@ public class BookDapperRepository : IBookDapperRepository
             if (!itemExists)
                 throw new EntityNotFoundException(id);
             else
-                throw new Exception("The resource was not modified.");
+                throw new Exception("The resource was not removed.");
         }
     }
 
@@ -108,7 +108,7 @@ public class BookDapperRepository : IBookDapperRepository
 
     private async Task<IEnumerable<BookDto>> FetchData(Guid? itemId = null)
     {
-        const string baseQuery =
+        const string baseSql =
             $@"SELECT " +
             $@"b.""{BookSchema.Columns.Id}"", " +
             $@"b.""{BookSchema.Columns.Title}"", " +
@@ -122,7 +122,7 @@ public class BookDapperRepository : IBookDapperRepository
         using var connection = _context.CreateConnection();
         var result = new Dictionary<Guid, BookDto>();
         await connection.QueryAsync<Book, Review, Book>(
-            itemId == null ? baseQuery : $@"{baseQuery} WHERE b.""{BookSchema.Columns.Id}"" = '{itemId.Value}'",
+            itemId == null ? baseSql : $@"{baseSql} WHERE b.""{BookSchema.Columns.Id}"" = '{itemId.Value}'",
             (book, review) =>
             {
                 // Check if the item was already added just to append a comment

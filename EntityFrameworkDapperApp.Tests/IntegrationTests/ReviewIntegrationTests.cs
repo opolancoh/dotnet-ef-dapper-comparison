@@ -1,18 +1,18 @@
-/* using System.Net;
+using System.Net;
 using System.Text;
 using System.Text.Json;
-using DapperExample.Tests.Helpers;
-using DapperExample.Tests.IntegrationTests.Fixtures;
-using DapperExample.Web.DTOs;
+using EntityFrameworkDapperApp.Core.Entities.DTOs;
+using EntityFrameworkDapperApp.Tests.Helpers;
+using EntityFrameworkDapperApp.Tests.IntegrationTests.Fixtures;
 
-namespace DapperExample.Tests.IntegrationTests;
+namespace EntityFrameworkDapperApp.Tests.IntegrationTests;
 
 [Collection("SharedContext")]
 public class ReviewIntegrationTests
 {
     private readonly JsonSerializerOptions _serializerOptions;
     private readonly HttpClient _httpClient;
-    private const string BasePath = "/api/reviews";
+    private const string BasePath = "/api/v2/reviews";
 
     public ReviewIntegrationTests(CustomWebApplicationFactory<Program> factory)
     {
@@ -34,7 +34,7 @@ public class ReviewIntegrationTests
         var payloadObject = JsonSerializer.Deserialize<List<ReviewDto>>(payloadString, _serializerOptions);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.True(payloadObject?.Count >= DbDataHelper.Reviews.Count);
+        Assert.True(payloadObject?.Count >= DbHelper.Reviews.Count);
     }
 
     #endregion
@@ -45,7 +45,7 @@ public class ReviewIntegrationTests
     [MemberData(nameof(ItemIds))]
     public async Task GeById_ShouldReturnOnlyOneItem(Guid itemId)
     {
-        var existingItem = DbDataHelper.Reviews.SingleOrDefault(x => x.Id == itemId);
+        var existingItem = DbHelper.Reviews.SingleOrDefault(x => x.Id == itemId);
 
         var response = await _httpClient.GetAsync($"{BasePath}/{itemId}");
         var payloadString = await response.Content.ReadAsStringAsync();
@@ -88,18 +88,17 @@ public class ReviewIntegrationTests
         {
             Comment = "This is a new item to test Create_ShouldCreateAnItem",
             Rating = 3,
-            BookId = DbDataHelper.BookId1
+            BookId = DbHelper.BookId1
         };
         var payload = JsonSerializer.Serialize(newItem, _serializerOptions);
         HttpContent httpContent = new StringContent(payload, Encoding.UTF8, "application/json");
 
         var response = await _httpClient.PostAsync($"{BasePath}", httpContent);
         var locationHeader = response.Headers.GetValues("Location").FirstOrDefault();
-        var newItemId = locationHeader?.Split('/').Last();
+        var newItemId = locationHeader?.Split('/').Last().Split('?').First();
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         Assert.NotEqual(Guid.Empty, new Guid(newItemId!));
-        Assert.Contains(BasePath, locationHeader?.ToLower() ?? string.Empty);
     }
 
     [Theory]
@@ -145,14 +144,14 @@ public class ReviewIntegrationTests
         {
             Comment = "This is a new item to test Update_ShouldUpdateAnItem",
             Rating = 3,
-            BookId = DbDataHelper.BookId1
+            BookId = DbHelper.BookId1
         };
         var newItemPayload = JsonSerializer.Serialize(newItem, _serializerOptions);
         var newItemHttpContent = new StringContent(newItemPayload, Encoding.UTF8, "application/json");
         var newItemResponse = await _httpClient.PostAsync($"{BasePath}", newItemHttpContent);
 
         var locationHeader = newItemResponse.Headers.GetValues("Location").FirstOrDefault();
-        var newItemId = locationHeader?.Split('/').Last();
+        var newItemId = locationHeader?.Split('/').Last().Split('?').First();
 
         // Update the created item
         var itemToUpdate = new
@@ -240,14 +239,14 @@ public class ReviewIntegrationTests
         {
             Comment = "This is a new item to test Remove_ShouldRemoveOnlyOneItem",
             Rating = 3,
-            BookId = DbDataHelper.BookId1
+            BookId = DbHelper.BookId1
         };
         var newItemPayload = JsonSerializer.Serialize(newItem, _serializerOptions);
         var newItemHttpContent = new StringContent(newItemPayload, Encoding.UTF8, "application/json");
         var newItemResponse = await _httpClient.PostAsync($"{BasePath}", newItemHttpContent);
         
         var locationHeader = newItemResponse.Headers.GetValues("Location").FirstOrDefault();
-        var newItemId = locationHeader?.Split('/').Last();
+        var newItemId = locationHeader?.Split('/').Last().Split('?').First();
 
         // Remove the created item
         var response = await _httpClient.DeleteAsync($"{BasePath}/{newItemId}");
@@ -320,13 +319,13 @@ public class ReviewIntegrationTests
     
     public static TheoryData<Guid> ItemIds => new()
     {
-        { DbDataHelper.ReviewId1 },
-        { DbDataHelper.ReviewId2 },
-        { DbDataHelper.ReviewId3 },
-        { DbDataHelper.ReviewId4 },
-        { DbDataHelper.ReviewId5 },
-        { DbDataHelper.ReviewId6 },
-        { DbDataHelper.ReviewId7 },
-        { DbDataHelper.ReviewId8 },
+        { DbHelper.ReviewId1 },
+        { DbHelper.ReviewId2 },
+        { DbHelper.ReviewId3 },
+        { DbHelper.ReviewId4 },
+        { DbHelper.ReviewId5 },
+        { DbHelper.ReviewId6 },
+        { DbHelper.ReviewId7 },
+        { DbHelper.ReviewId8 },
     };
-} */
+} 

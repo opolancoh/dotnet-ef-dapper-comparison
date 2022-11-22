@@ -26,9 +26,13 @@ public static class ServiceExtensions
     {
         services.AddScoped<IBookEntityFrameworkRepository, BookEntityFrameworkRepository>();
         services.AddScoped<IBookDapperRepository, BookDapperRepository>();
+        services.AddScoped<IReviewEntityFrameworkRepository, ReviewEntityFrameworkRepository>();
+        services.AddScoped<IReviewDapperRepository, ReviewDapperRepository>();
 
         services.AddScoped<IBookEntityFrameworkService, BookEntityFrameworkService>();
         services.AddScoped<IBookDapperService, BookDapperService>();
+        services.AddScoped<IReviewEntityFrameworkService, ReviewEntityFrameworkService>();
+        services.AddScoped<IReviewDapperService, ReviewDapperService>();
     }
 
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)

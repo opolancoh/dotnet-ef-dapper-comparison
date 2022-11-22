@@ -1,6 +1,6 @@
 namespace EntityFrameworkDapperApp.Core.Contracts.Services;
 
-public interface IPersistenceServiceBase<TDto, in TCreate, TUpdate>
+public interface IServiceBase<TDto, in TCreate, in TUpdate>
 {
     Task<IEnumerable<TDto>> GetAll();
     Task<TDto?> GetById(Guid id);
