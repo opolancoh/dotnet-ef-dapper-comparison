@@ -38,7 +38,7 @@ public class ReviewsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(ReviewForCreatingDto item)
+    public async Task<IActionResult> Create(ReviewCreateDto item)
     {
         var newItemId = await _service.Create(item);
 
@@ -46,7 +46,7 @@ public class ReviewsController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, ReviewForUpdatingDto item)
+    public async Task<IActionResult> Update(Guid id, ReviewUpdateDto item)
     {
         try
         {

@@ -3,7 +3,7 @@ using EntityFrameworkDapperApp.Core.Entities.Validators;
 
 namespace EntityFrameworkDapperApp.Core.Entities.DTOs;
 
-public record BookForCreatingDto : IValidatableObject
+public record BookCreateOrUpdateDto : IValidatableObject
 {
     [Required] public string? Title { get; init; }
     [Required] public DateTime? PublishedOn { get; init; }

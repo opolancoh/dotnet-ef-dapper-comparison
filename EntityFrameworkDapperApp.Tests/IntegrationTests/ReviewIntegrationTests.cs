@@ -302,7 +302,6 @@ public class ReviewIntegrationTests
 
     public static TheoryData<string[], object> MissingRequiredFieldsForUpdating => new()
     {
-        { new[] { "The Id field is required." }, new { Comment = "Comment", Rating = 3, BookId = new Guid() } },
     };
 
     public static TheoryData<string[], object> InvalidFields => new()

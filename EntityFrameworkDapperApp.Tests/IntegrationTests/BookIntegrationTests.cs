@@ -305,22 +305,6 @@ public class BookIntegrationTests
 
     public static TheoryData<string[], object> MissingRequiredFieldsForUpdating => new()
     {
-        {
-            new[]
-            {
-                "The Id field is required.",
-                "The Title field is required.",
-                "The PublishedOn field is required."
-            },
-            new { }
-        },
-        {
-            new[] { "The Id field is required." }, new
-            {
-                Title = "New Book 01",
-                PublishedOn = new DateTime(2022, 01, 12).ToUniversalTime(),
-            }
-        },
     };
 
     public static TheoryData<string[], object> InvalidFields => new()

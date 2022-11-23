@@ -3,11 +3,10 @@ using EntityFrameworkDapperApp.Core.Entities.Validators;
 
 namespace EntityFrameworkDapperApp.Core.Entities.DTOs;
 
-public record ReviewForCreatingDto : IValidatableObject
+public record ReviewCreateDto : IValidatableObject
 {
     [Required] public string? Comment { get; init; }
     [Required] public int? Rating { get; init; }
-
     [Required] public Guid? BookId { get; init; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

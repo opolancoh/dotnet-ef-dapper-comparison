@@ -24,7 +24,7 @@ public sealed class BookDapperService : IBookDapperService
         return await _repository.GetById(id);
     }
 
-    public async Task<Guid> Create(BookForCreatingDto item)
+    public async Task<Guid> Create(BookCreateOrUpdateDto item)
     {
         var newItem = new Book()
         {
@@ -38,7 +38,7 @@ public sealed class BookDapperService : IBookDapperService
         return newItem.Id;
     }
 
-    public async Task Update(Guid id, BookForUpdatingDto item)
+    public async Task Update(Guid id, BookCreateOrUpdateDto item)
     {
         var itemToUpdate = new Book
         {

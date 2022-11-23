@@ -24,7 +24,7 @@ public sealed class ReviewEntityFrameworkService : IReviewEntityFrameworkService
         return await _repository.GetById(id);
     }
 
-    public async Task<Guid> Create(ReviewForCreatingDto item)
+    public async Task<Guid> Create(ReviewCreateDto item)
     {
         var newItem = new Review
         {
@@ -39,7 +39,7 @@ public sealed class ReviewEntityFrameworkService : IReviewEntityFrameworkService
         return newItem.Id;
     }
 
-    public async Task Update(Guid id, ReviewForUpdatingDto item)
+    public async Task Update(Guid id, ReviewUpdateDto item)
     {
         var itemToUpdate = new Review
         {

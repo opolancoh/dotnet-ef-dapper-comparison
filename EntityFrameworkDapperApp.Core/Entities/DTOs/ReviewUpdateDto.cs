@@ -3,9 +3,8 @@ using EntityFrameworkDapperApp.Core.Entities.Validators;
 
 namespace EntityFrameworkDapperApp.Core.Entities.DTOs;
 
-public record ReviewForUpdatingDto : IValidatableObject
+public record ReviewUpdateDto : IValidatableObject
 {
-    [Required] public Guid? Id { get; init; }
     [Required] public string? Comment { get; init; }
     [Required] public int? Rating { get; init; }
 
