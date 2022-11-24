@@ -12,7 +12,7 @@ The data model is represented in the next image:
   <img src="./docs/img/database-diagram-1.png" alt="Database diagram" width="500">
 </p>
 
-### Technologies in this repo:
+#### Technologies in this repo:
 * DotNet Core 6
 * Entity Framework 6
 * Dapper 2
@@ -44,7 +44,7 @@ The idea is to create one analysis for every CRUD item. The duration of every pe
 
 In general, we want to see how many requests we can do in those 30 seconds and analyze all the benchmarking results.
 
-#### **CREATE (http post)**
+### **CREATE (http post)**
 
 * 30 seconds
 * 1 user
@@ -54,7 +54,7 @@ In general, we want to see how many requests we can do in those 30 seconds and a
 k6 run -e API_VERSION=v1 --duration 30s --vus 1 books-create-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v1-create-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v1-create-test.png" alt="Performance test" width="800">
 </p>
 
 **Dapper**
@@ -62,7 +62,7 @@ k6 run -e API_VERSION=v1 --duration 30s --vus 1 books-create-test.js
 k6 run -e API_VERSION=v2 --duration 30s --vus 1 books-create-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v2-create-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v2-create-test.png" alt="Performance test" width="800">
 </p>
 
 **Results**:
@@ -77,7 +77,7 @@ In 30 seconds:
 * Average: Dapper is 2.4x faster than EF Core
 
 
-#### **GET ALL (http get)**
+### **GET ALL (http get)**
 
 * 30 seconds
 * 1 user
@@ -87,7 +87,7 @@ In 30 seconds:
 k6 run -e API_VERSION=v1 --duration 30s --vus 1 books-get-all-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v1-get-all-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v1-get-all-test.png" alt="Performance test" width="800">
 </p>
 
 **Dapper**
@@ -95,7 +95,7 @@ k6 run -e API_VERSION=v1 --duration 30s --vus 1 books-get-all-test.js
 k6 run -e API_VERSION=v2 --duration 30s --vus 1 books-get-all-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v2-get-all-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v2-get-all-test.png" alt="Performance test" width="800">
 </p>
 
 **Results**:
@@ -110,7 +110,7 @@ In 30 seconds:
 * Average: Dapper is 1.6x faster than EF Core
 
 
-#### **GET BY ID (http get)**
+### **GET BY ID (http get)**
 
 * 30 seconds
 * 1 user
@@ -120,7 +120,7 @@ In 30 seconds:
 k6 run -e API_VERSION=v1 --duration 30s --vus 1 books-get-by-id-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v1-get-by-id-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v1-get-by-id-test.png" alt="Performance test" width="800">
 </p>
 
 **Dapper**
@@ -128,7 +128,7 @@ k6 run -e API_VERSION=v1 --duration 30s --vus 1 books-get-by-id-test.js
 k6 run -e API_VERSION=v2 --duration 30s --vus 1 books-get-by-id-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v2-get-by-id-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v2-get-by-id-test.png" alt="Performance test" width="800">
 </p>
 
 **Results**:
@@ -143,7 +143,7 @@ In 30 seconds:
 * Average: Dapper is 1.5x faster than EF Core
 
 
-#### **UPDATE (http put)**
+### **UPDATE (http put)**
 
 * 30 seconds
 * 1 user
@@ -153,7 +153,7 @@ In 30 seconds:
 k6 run -e API_VERSION=v1 --duration 30s --vus 1 books-update-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v1-update-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v1-update-test.png" alt="Performance test" width="800">
 </p>
 
 **Dapper**
@@ -161,7 +161,7 @@ k6 run -e API_VERSION=v1 --duration 30s --vus 1 books-update-test.js
 k6 run -e API_VERSION=v2 --duration 30s --vus 1 books-update-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v2-update-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v2-update-test.png" alt="Performance test" width="800">
 </p>
 
 **Results**:
@@ -176,7 +176,7 @@ In 30 seconds:
 * Average: Dapper is 2.2x faster than EF Core
 
 
-#### **REMOVE (http delete)**
+### **REMOVE (http delete)**
 
 * 500 iterations
 * 1 user
@@ -186,7 +186,7 @@ In 30 seconds:
 k6 run -e API_VERSION=v1 --iterations 500 --vus 1 books-remove-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v1-remove-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v1-remove-test.png" alt="Performance test" width="800">
 </p>
 
 **Dapper**
@@ -194,7 +194,7 @@ k6 run -e API_VERSION=v1 --iterations 500 --vus 1 books-remove-test.js
 k6 run -e API_VERSION=v2 --iterations 500 --vus 1 books-remove-test.js
 ```
 <p align="center">
-  <img src="./docs/img/k6-books-v2-remove-test.png" alt="Performance test" width="500">
+  <img src="./docs/img/k6-books-v2-remove-test.png" alt="Performance test" width="800">
 </p>
 
 **Results**:
