@@ -3,7 +3,7 @@ import { check } from 'k6';
 import { API_BASE_URL, BOOKS_ENDPOINT } from '../config.js';
 
 export function setup() {
-  const requestUrl = `${API_BASE_URL}/${__ENV.API_VERSION}/${BOOKS_ENDPOINT}/${id}`;
+  const requestUrl = `${API_BASE_URL}/${__ENV.API_VERSION}/${BOOKS_ENDPOINT}`;
   console.log(`requestUrl: ${requestUrl}`);
 
   return { requestUrl };

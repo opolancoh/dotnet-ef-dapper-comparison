@@ -7,7 +7,7 @@ export function setup() {
   /* const url = `${API_BASE_URL}/${__ENV.API_VERSION}/${BOOKS_ENDPOINT}`;
   const res = http.get(url);
   const id = res.json()[0].id; */
-  const id = 'b004755a-6b13-4644-a187-11157598ce1c';
+  const id = '02a24d88-0c02-41fc-8fe7-a9ff1f86fbd0';
 
   const requestUrl = `${API_BASE_URL}/${__ENV.API_VERSION}/${BOOKS_ENDPOINT}/${id}`;
   console.log(`requestUrl: ${requestUrl}`);
@@ -24,7 +24,7 @@ export default function ({ requestUrl, itemId }) {
 
   const payload = {
     title: 'Don Quijote de la Mancha (updated)',
-    publishedOn: now.toISOString()
+    publishedOn: now.toISOString(),
   };
 
   const res = http.put(requestUrl, JSON.stringify(payload), params);

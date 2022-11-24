@@ -7,7 +7,7 @@ export function setup() {
   /* const url = `${API_BASE_URL}/${__ENV.API_VERSION}/${BOOKS_ENDPOINT}`;
   const res = http.get(url);
   const id = res.json()[0].id; */
-  const id = 'c92e95cd-bea8-485c-b550-b8e0632b60bd';
+  const id = '6c9f18a5-f819-41a4-9c79-fab008924f8f';
 
   const requestUrl = `${API_BASE_URL}/${__ENV.API_VERSION}/${BOOKS_ENDPOINT}/${id}`;
   console.log(`requestUrl: ${requestUrl}`);
@@ -24,6 +24,6 @@ export default function ({ requestUrl, itemId }) {
 
   check(res, {
     'Status 200': (r) => r.status === 200,
-    ID: (r) => r.json().id === itemId,
+    'Item ID': (r) => r.json().id === itemId,
   });
 }
