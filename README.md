@@ -1,8 +1,6 @@
 # EF Core vs Dapper Query Performance Testing
 A sample .NET Core web api to compare EF Core and Dapper query performance from a Postgres database.
 
-**In general, the results show that Dapper offers much faster performance compared to EF Core. All the test analysis validate that, but with Dapper you have to write more code and worry about the database, table and column creation.**
-
 [Entity Framework (EF) Core](https://learn.microsoft.com/en-us/ef/core) is a lightweight, extensible, open source and cross-platform version of the popular Entity Framework data access technology.
 
 [Dapper](https://www.learndapper.com) is a simple object mapper for the Microsoft .NET platform. It is a framework for mapping an object-oriented domain model to a traditional relational database.
@@ -207,3 +205,6 @@ k6 run -e API_VERSION=v2 --iterations 500 --vus 1 books-remove-test.js
 In 500 iterations:
 * Iterations: N/A
 * Average: Dapper is 1.8x faster than EF Core
+
+## Conclusions
+* In general, the results show that Dapper offers much faster performance compared to EF Core. All the test analysis validate that, but with Dapper you have to write more code and worry about the database, table and column creation.
